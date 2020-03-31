@@ -1,0 +1,21 @@
+{
+  "name": "Doctor online",
+  "short_name": "Doctor online",
+  "icons": [
+    {
+      "src": "/images/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "background_color": "#FFFFFF",
+  "description": "Doctor online",
+  "display": "fullscreen",
+  "start_url": "/",
+  "theme_color": "#000"
+}

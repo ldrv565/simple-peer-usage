@@ -1,0 +1,9 @@
+node_modules
+.next
+.now
+.vscode
+.env
+.env.build
+**/package-lock.json
+**/yarn.lock
+.now

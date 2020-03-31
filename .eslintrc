@@ -1,0 +1,38 @@
+{
+  "env": {
+    "browser": true
+  },
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["prettier"],
+  "parser": "babel-eslint",
+  "rules": {
+    "prettier/prettier": ["error", { "singleQuote": true }],
+    "import/prefer-default-export": "off",
+    "react/forbid-prop-types": "off",
+    "react/require-default-props": "off",
+    "prefer-promise-reject-errors": "off",
+    "no-throw-literal": "off",
+    "react/jsx-one-expression-per-line": [{ "allow": "literal" }],
+    "quotes": ["error", "single"],
+    "jsx-quotes": ["error", "prefer-double"]
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": [
+        ["components", "./components"],
+        ["constants", "./constants"],
+        ["context", "./context"],
+        ["core", "./core"],
+        ["utils", "./utils"],
+        ["validation", "./validation"],
+        ["theme", "./core/theme"],
+        ["services", "./services"],
+        ["sources", "./sources"],
+        ["graphQL", "./graphql"],
+        ["public", "./public"],
+        ["api", "./api"],
+        ["hooks", "./hooks"]
+      ]
+    }
+  }
+}
