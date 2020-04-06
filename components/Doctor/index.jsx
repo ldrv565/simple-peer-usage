@@ -8,6 +8,8 @@ import { MenuItem } from '@material-ui/core';
 
 import Layout from '../Layout';
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 const DoctorPage = () => {
   useEffect(() => {
     const roomContainer = document.getElementById('list');
@@ -34,13 +36,13 @@ const DoctorPage = () => {
       return videoElement;
     }
 
-    const socket = io('localhost:80'); // setup the socket.io socket
+    const socket = io(isDev ? 'localhost:4000' : 'ldrv.xyz:4000'); // setup the socket.io socket
     const signalClient = new SimpleSignalClient(socket); // construct the signal client
     let currentRoom = null; // keeps track of current room
 
     function onPeer(peer, localStream) {
       peer.addStream(localStream);
-      peer.on('stream', remoteStream => {
+      peer.on('stream', (remoteStream) => {
         const videoElement = createVideoElement(
           remoteVideoContainer,
           remoteStream
@@ -64,7 +66,7 @@ const DoctorPage = () => {
       // disconnect from all peers in old room
       if (currentRoom) {
         if (currentRoom !== roomID) {
-          signalClient.peers().forEach(peer => {
+          signalClient.peers().forEach((peer) => {
             peer.destroy();
           });
         } else {
@@ -84,7 +86,7 @@ const DoctorPage = () => {
         if (discoveryData.roomResponse === roomID) {
           console.log(discoveryData);
           signalClient.removeListener('discover', onRoomPeers);
-          discoveryData.peers.forEach(peerID =>
+          discoveryData.peers.forEach((peerID) =>
             connectToPeer(peerID, localStream)
           ); // connect to all peers in new room
         }
@@ -93,22 +95,22 @@ const DoctorPage = () => {
     }
 
     // request local webcam
-    navigator.getUserMedia(
+    navigator?.mediaDevices?.getUserMedia(
       { audio: true, video: true },
-      localStream => {
+      (localStream) => {
         createVideoElement(localVideoContainer, localStream, true); // display local video
         signalClient.discover(null); // begin discovering rooms
 
-        signalClient.on('request', async request => {
+        signalClient.on('request', async (request) => {
           const { peer } = await request.accept();
           onPeer(peer, localStream);
         });
 
         // listen for discovery's completion
-        signalClient.once('discover', discoveryData => {
+        signalClient.once('discover', (discoveryData) => {
           // discovery provides a list of rooms, show them to the user
           console.log(discoveryData);
-          discoveryData.rooms.forEach(roomID => {
+          discoveryData.rooms.forEach((roomID) => {
             const roomElement = createRoomElement(roomID); // create a DOM element for each room
             roomElement.addEventListener('click', () =>
               joinRoom(roomID, localStream)

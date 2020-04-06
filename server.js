@@ -28,11 +28,11 @@ app.prepare().then(() => {
     serveClient: false,
     wsEngine: 'ws'
   });
-  httpServer.listen(80); // listen on port 80
+  httpServer.listen(4000); // listen on port 4000
 
   const signal = new SimpleSignalServer(ioServer);
 
-  signal.on('discover', request => {
+  signal.on('discover', (request) => {
     if (!request.discoveryData) {
       // return list of rooms
       request.discover(request.socket.id, {
@@ -82,7 +82,7 @@ app.prepare().then(() => {
     return handle(req, res);
   });
 
-  server.listen(port, err => {
+  server.listen(port, (err) => {
     if (err) throw err;
     // eslint-disable-next-line no-console
     console.info(`> Server ready on port: ${port}`);

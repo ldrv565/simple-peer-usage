@@ -1,0 +1,12 @@
+docker run -d \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v /root/.exoframe:/root/.exoframe \
+  -v /root/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro \
+  -e EXO_PRIVATE_KEY= \
+  --label traefik.enable=true \
+  --label "traefik.http.routers.exoframe-server.rule=Host(\`exoframe.ldrv.xyz\`)" \
+  --restart always \
+  --name exoframe-server \
+  exoframe/server
+
+  ssh root@134.122.117.112
