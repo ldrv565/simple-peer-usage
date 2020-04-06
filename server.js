@@ -64,7 +64,7 @@ app.prepare().then(() => {
     const { pathname } = parsedUrl;
 
     if (pathname === '/service-worker.js') {
-      const filePath = join(__dirname, '../', '.next', 'service-worker.js');
+      const filePath = join(__dirname, '.next', 'service-worker.js');
 
       return app.serveStatic(req, res, filePath);
     }
