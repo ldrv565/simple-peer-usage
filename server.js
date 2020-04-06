@@ -8,7 +8,7 @@ const SimpleSignalServer = require('simple-signal-server'); // require('simple-s
 const { parse } = require('url');
 const { join } = require('path');
 
-const port = parseInt(process.env.PORT, 10) || 8080;
+const port = parseInt(process.env.PORT, 10) || 3000;
 const isDev = process.env.NODE_ENV !== 'production';
 const app = next({ dev: isDev });
 const handle = app.getRequestHandler();
