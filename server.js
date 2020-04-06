@@ -28,7 +28,7 @@ app.prepare().then(() => {
     serveClient: false,
     wsEngine: 'ws'
   });
-  httpServer.listen(80); // listen on port 80
+  httpServer.listen(4000);
 
   const signal = new SimpleSignalServer(ioServer);
 

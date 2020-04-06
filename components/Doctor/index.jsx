@@ -34,7 +34,7 @@ const DoctorPage = () => {
       return videoElement;
     }
 
-    const socket = io('localhost:80'); // setup the socket.io socket
+    const socket = io('localhost:4000'); // setup the socket.io socket
     const signalClient = new SimpleSignalClient(socket); // construct the signal client
     let currentRoom = null; // keeps track of current room
 
