@@ -37,7 +37,7 @@ const DoctorPage = () => {
     }
 
     const socket = io(
-      isDev ? 'localhost:4000' : 'socket-chat.m.astral-dev.net'
+      isDev ? 'localhost:4000' : 'chat.m.astral-dev.net/socket'
     );
     const signalClient = new SimpleSignalClient(socket); // construct the signal client
     let currentRoom = null; // keeps track of current room
