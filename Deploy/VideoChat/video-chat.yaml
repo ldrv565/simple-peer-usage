@@ -1,0 +1,66 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: video-chat
+#  namespace: ${NAMESPACE}
+spec:
+  replicas: __ReplicasCount__
+  revisionHistoryLimit: __RevisionHistoryLimit__
+  selector:
+    matchLabels:
+      app: astral-arm
+      component:  video-chat
+  template:
+    metadata:
+      labels:
+        app: astral-arm
+        component:  video-chat
+    spec:
+      containers:
+      - name:  video-chat
+        image: __ImagePath__
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: BasePath
+          value: /videoChat         
+        ports:
+        - containerPort: 8080
+        - containerPort: 4000
+#        livenessProbe:
+#          httpGet:
+#            path: /hc
+#            port: 3000
+#          initialDelaySeconds: 60
+#          timeoutSeconds: 180
+#        readinessProbe:
+#          httpGet:
+#            path: /hc
+#            port: 3000
+#            scheme: HTTP
+#          periodSeconds: 10
+#          successThreshold: 1
+#          timeoutSeconds: 1
+      imagePullSecrets:
+      - name: missecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  video-chat
+#  namespace: ${NAMESPACE}
+  labels:
+    app: astral-arm
+    component:  video-chat
+spec:
+  type: NodePort
+  ports:
+  - name: base
+    port: 8080
+    nodePort: __NodePort__
+  - name: socket-server
+    port: 4000
+    nodePort: __SocketNodePort__
+  selector:
+    app: astral-arm
+    component: video-chat
+---
