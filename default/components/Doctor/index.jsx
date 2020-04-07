@@ -37,7 +37,7 @@ const DoctorPage = () => {
     }
 
     const socket = io(
-      isDev ? 'localhost:4000' : 'ldrv-project.appspot.com:4000'
+      isDev ? 'localhost:4000' : 'socket.ldrv-project.appspot.com'
     );
     const signalClient = new SimpleSignalClient(socket); // construct the signal client
     let currentRoom = null; // keeps track of current room
