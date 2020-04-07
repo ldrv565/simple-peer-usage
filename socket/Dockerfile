@@ -1,12 +1,11 @@
 FROM node:alpine
-# Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-# Install app dependencies
-COPY package.json /usr/src/app/
+# Create socketApp directory
+RUN mkdir -p /usr/src/socketApp
+WORKDIR /usr/src/socketApp
+# Install socketApp dependencies
+COPY package.json /usr/src/socketApp/
 RUN npm install
-# Bundle app source
-COPY . /usr/src/app
-RUN npm run build
+# Bundle socketApp source
+COPY . /usr/src/socketApp
 EXPOSE 4000
 CMD [ "npm", "start" ]

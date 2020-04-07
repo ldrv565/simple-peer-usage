@@ -8,7 +8,7 @@ import { MenuItem } from '@material-ui/core';
 
 import Layout from '../Layout';
 
-const isDev = process.env.NODE_ENV !== 'production';
+// const isDev = process.env.NODE_ENV !== 'production';
 
 const DoctorPage = () => {
   useEffect(() => {
@@ -36,9 +36,7 @@ const DoctorPage = () => {
       return videoElement;
     }
 
-    const socket = io(
-      isDev ? 'localhost:4000' : 'socket.ldrv-project.appspot.com'
-    );
+    const socket = io('socket.ldrv-project.appspot.com');
     const signalClient = new SimpleSignalClient(socket); // construct the signal client
     let currentRoom = null; // keeps track of current room
 

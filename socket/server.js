@@ -3,7 +3,7 @@ const io = require('socket.io');
 const SimpleSignalServer = require('simple-signal-server'); // require('simple-signal-server')
 
 const port = parseInt(process.env.PORT, 10) || 4000;
-const isDev = process.env.NODE_ENV !== 'production';
+// const isDev = process.env.NODE_ENV !== 'production';
 
 const httpServer = http.createServer();
 
