@@ -28,7 +28,6 @@ app.prepare().then(() => {
     serveClient: false,
     wsEngine: 'ws'
   });
-  httpServer.listen(4000);
 
   const signal = new SimpleSignalServer(ioServer);
 
@@ -62,6 +61,11 @@ app.prepare().then(() => {
   server.all('*', async (req, res, nextHandle) => {
     const parsedUrl = parse(req.url, true);
     const { pathname } = parsedUrl;
+    console.log(parsedUrl);
+
+    if (pathname.split('/')[1] === 'socket.io') {
+      return httpServer.emit('request', req, res);
+    }
 
     if (pathname === '/service-worker.js') {
       const filePath = join(__dirname, '.next', 'service-worker.js');
