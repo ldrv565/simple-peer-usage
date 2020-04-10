@@ -3,30 +3,39 @@ import styled from 'styled-components';
 
 import { Button, TextField } from '@material-ui/core';
 
+import VideoChat from './VideoChat';
+
 const Patient = () => {
   const [username, setUsername] = useState('');
   const [inputValue, setInputValue] = useState(username);
 
   const handleUsernameChange = event => setInputValue(event.target.value);
 
-  const handleSubmit = () => {
+  const handleSubmit = event => {
+    event.preventDefault();
     setUsername(inputValue);
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Title>Введите имя</Title>
+    <>
+      {!username ? (
+        <Form method="POST" onSubmit={handleSubmit}>
+          <Title>Введите имя</Title>
 
-      <TextFieldStyled
-        required
-        value={inputValue}
-        onChange={handleUsernameChange}
-      />
+          <TextFieldStyled
+            required
+            value={inputValue}
+            onChange={handleUsernameChange}
+          />
 
-      <ButtonStyled type="submit" variant="contained" color="primary">
-        Принять
-      </ButtonStyled>
-    </Form>
+          <ButtonStyled type="submit" variant="contained" color="primary">
+            Принять
+          </ButtonStyled>
+        </Form>
+      ) : (
+        <VideoChat name={username} />
+      )}
+    </>
   );
 };
 

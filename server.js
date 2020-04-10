@@ -13,11 +13,9 @@ const isDev = process.env.NODE_ENV !== 'production';
 const app = next({ dev: isDev });
 const handle = app.getRequestHandler();
 
-const rooms = {
-  'Room One': new Set(),
-  'Room Two': new Set(),
-  'Room Three': new Set()
-};
+const rooms = {};
+let doctorID = null;
+let doctorRequest = null;
 
 app.prepare().then(() => {
   const server = express();
@@ -33,30 +31,77 @@ app.prepare().then(() => {
   const signal = new SimpleSignalServer(ioServer);
 
   signal.on('discover', request => {
+    // doctor receive data about rooms
+
     if (!request.discoveryData) {
-      // return list of rooms
-      request.discover(request.socket.id, {
+      doctorID = request.socket.id;
+      doctorRequest = request;
+
+      request.discover(doctorID, {
         rooms: Object.keys(rooms)
       });
-    } else {
-      // return peers in a room
-      const roomID = request.discoveryData;
-      request.discover(request.socket.id, {
-        roomResponse: roomID, // return the roomID so client can correlate discovery data
-        peers: Array.from(rooms[roomID])
-      });
-      if (request.socket.roomID) {
-        // if peer was already in a room
-        console.log(request.socket.id, 'left room', request.socket.roomID);
-        rooms[request.socket.roomID].delete(request.socket.id); // remove peer from that room
-      }
-      if (request.socket.roomID !== roomID) {
-        // if peer is joining a new room
-        request.socket.roomID = roomID; // track the current room in the persistent socket object
-        console.log(request.socket.id, 'joined room', roomID);
-        rooms[roomID].add(request.socket.id); // add peer to new room
-      }
+
+      return null;
     }
+
+    // if patient was disconnected doctor will remove room
+
+    const { remove } = request.discoveryData;
+
+    if (remove) {
+      delete rooms[remove];
+      request.socket.roomID = null;
+
+      request.discover(doctorID, {
+        rooms: Object.keys(rooms)
+      });
+
+      return null;
+    }
+
+    const { roomID } = request.discoveryData;
+
+    // patient create room by his name
+
+    if (request.socket.id !== doctorID) {
+      request.socket.roomID = roomID;
+      rooms[roomID] = {
+        patient: request.socket.id,
+        doctor: rooms[roomID] && rooms[roomID].doctor
+      };
+
+      request.discover(request.socket.id, {
+        peer: rooms[roomID].patient
+      });
+
+      // doctor will receive new rooms data
+
+      if (doctorRequest) {
+        doctorRequest.discover(doctorID, {
+          rooms: Object.keys(rooms)
+        });
+      }
+
+      return null;
+    }
+
+    // doctor receive patient peer id by room name and left previous room
+
+    const response = {
+      peerID: rooms[roomID].patient
+    };
+
+    request.discover(request.socket.id, response);
+    if (request.socket.roomID) {
+      rooms[request.socket.roomID].doctor = null;
+    }
+
+    if (request.socket.roomID !== roomID) {
+      rooms[roomID].doctor = request.socket.id;
+      request.socket.roomID = roomID;
+    }
+
+    return null;
   });
 
   server.all('*', async (req, res, nextHandle) => {

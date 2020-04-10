@@ -1,11 +1,9 @@
 /* eslint-disable no-alert */
 import React, { useState, useEffect, useCallback } from 'react';
-import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import io from 'socket.io-client';
 import SimpleSignalClient from 'simple-signal-client';
-
-import { MenuItem } from '@material-ui/core';
 
 import StreamVideo from '../StreamVideo';
 
@@ -29,10 +27,8 @@ const getLocalStream = async () =>
       return getLocalStream();
     });
 
-const DoctorPage = () => {
+const VideoChat = ({ name }) => {
   const [signalClient] = useState(() => initSignalClient());
-  const [rooms, setRooms] = useState([]);
-  const [currentRoom, setCurrentRoom] = useState(null);
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
 
@@ -47,70 +43,33 @@ const DoctorPage = () => {
 
   useEffect(() => {
     getLocalStream().then(stream => setLocalStream(stream));
+    signalClient.discover({ roomID: name });
   }, []);
 
   useEffect(() => {
-    if (!currentRoom) {
-      signalClient.discover(null);
-      signalClient.on('discover', ({ rooms: newRooms }) => setRooms(newRooms));
-    }
-
-    if (currentRoom) {
-      signalClient.discover({ roomID: currentRoom });
-
+    if (localStream) {
       signalClient.on('request', request =>
         request.accept().then(({ peer }) => connectToPeer(peer))
       );
 
-      signalClient.on('discover', ({ peerID }) => {
+      signalClient.on('discover', ({ peerID }) =>
         signalClient
-          .connect(peerID, currentRoom)
+          .connect(peerID, name)
           .then(({ peer }) => connectToPeer(peer))
-          .catch(error => {
-            if (error) {
-              signalClient.discover({ remove: currentRoom });
-              setCurrentRoom(null);
-            }
-          });
-      });
+      );
     }
-  }, [currentRoom]);
+  }, [localStream]);
 
   return (
     <Layout>
-      {!currentRoom ? (
-        <List>
-          {rooms &&
-            rooms.map(roomID => (
-              <MenuItemStyled
-                key={roomID}
-                selected={roomID === currentRoom}
-                onClick={() => setCurrentRoom(roomID)}
-              >
-                {roomID}
-              </MenuItemStyled>
-            ))}
-        </List>
-      ) : (
-        currentRoom
-      )}
       <StreamVideo muted autoPlay srcObject={localStream} />
       {remoteStream && <StreamVideo muted autoPlay srcObject={remoteStream} />}
     </Layout>
   );
 };
 
-export default DoctorPage;
+VideoChat.propTypes = {
+  name: PropTypes.string
+};
 
-const MenuItemStyled = styled(MenuItem)`
-  &:not(:last-of-type) {
-    border-bottom: 1px solid ${({ theme }) => theme.palette.divider};
-  }
-`;
-
-const List = styled.div`
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid ${({ theme }) => theme.palette.divider};
-  background: ${({ theme }) => theme.palette.background.secondary};
-`;
+export default VideoChat;
