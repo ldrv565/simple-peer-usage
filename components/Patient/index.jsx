@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { Button, TextField } from '@material-ui/core';
 
-import VideoChat from './VideoChat';
+import VideoChat from '../VideoChat';
 
 const Patient = () => {
   const [username, setUsername] = useState('');
@@ -33,7 +33,7 @@ const Patient = () => {
           </ButtonStyled>
         </Form>
       ) : (
-        <VideoChat name={username} />
+        <VideoChat currentRoom={username} />
       )}
     </>
   );
