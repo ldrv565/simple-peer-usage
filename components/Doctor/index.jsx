@@ -48,7 +48,7 @@ const DoctorPage = () => {
       ) : (
         <VideoChat
           currentRoom={currentRoom}
-          signalClient={signalClient}
+          client={signalClient}
           setCurrentRoom={setCurrentRoom}
         />
       )}

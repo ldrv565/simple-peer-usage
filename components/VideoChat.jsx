@@ -26,8 +26,8 @@ const getLocalStream = async () =>
       return getLocalStream();
     });
 
-const VideoChat = ({ currentRoom, signalClient, setCurrentRoom }) => {
-  const [client] = useState(() => signalClient || initSignalClient());
+const VideoChat = ({ currentRoom, client, setCurrentRoom }) => {
+  const [signalClient] = useState(() => client || initSignalClient());
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
 
@@ -42,22 +42,22 @@ const VideoChat = ({ currentRoom, signalClient, setCurrentRoom }) => {
 
   useEffect(() => {
     getLocalStream().then(stream => setLocalStream(stream));
-    client.discover({ roomID: currentRoom });
+    signalClient.discover({ roomID: currentRoom });
   }, []);
 
   useEffect(() => {
     if (localStream) {
-      client.on('request', request =>
+      signalClient.on('request', request =>
         request.accept().then(({ peer }) => connectToPeer(peer))
       );
 
-      client.on('discover', ({ peerID }) =>
-        client
+      signalClient.on('discover', ({ peerID }) =>
+        signalClient
           .connect(peerID, currentRoom)
           .then(({ peer }) => connectToPeer(peer))
           .catch(error => {
             if (error) {
-              client.discover({ remove: currentRoom });
+              signalClient.discover({ remove: currentRoom });
               setCurrentRoom(null);
             }
           })
@@ -75,7 +75,7 @@ const VideoChat = ({ currentRoom, signalClient, setCurrentRoom }) => {
 
 VideoChat.propTypes = {
   currentRoom: PropTypes.string,
-  signalClient: PropTypes.object,
+  client: PropTypes.object,
   setCurrentRoom: PropTypes.func
 };
 
