@@ -58,8 +58,10 @@ const VideoChat = ({ currentRoom, client, setCurrentRoom }) => {
           .then(({ peer }) => connectToPeer(peer))
           .catch(error => {
             if (error) {
-              signalClient.discover({ remove: currentRoom });
-              setCurrentRoom(null);
+              if (setCurrentRoom) {
+                signalClient.discover({ remove: currentRoom });
+                setCurrentRoom(null);
+              }
             }
           })
       );
