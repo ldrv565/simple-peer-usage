@@ -5,9 +5,8 @@ import PropTypes from 'prop-types';
 import io from 'socket.io-client';
 import SimpleSignalClient from 'simple-signal-client';
 
-import StreamVideo from '../StreamVideo';
-
-import Layout from '../Layout';
+import StreamVideo from './StreamVideo';
+import Layout from './Layout';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -27,8 +26,8 @@ const getLocalStream = async () =>
       return getLocalStream();
     });
 
-const VideoChat = ({ name }) => {
-  const [signalClient] = useState(() => initSignalClient());
+const VideoChat = ({ currentRoom, signalClient, setCurrentRoom }) => {
+  const [client] = useState(() => signalClient || initSignalClient());
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
 
@@ -43,19 +42,25 @@ const VideoChat = ({ name }) => {
 
   useEffect(() => {
     getLocalStream().then(stream => setLocalStream(stream));
-    signalClient.discover({ roomID: name });
+    client.discover({ roomID: currentRoom });
   }, []);
 
   useEffect(() => {
     if (localStream) {
-      signalClient.on('request', request =>
+      client.on('request', request =>
         request.accept().then(({ peer }) => connectToPeer(peer))
       );
 
-      signalClient.on('discover', ({ peerID }) =>
-        signalClient
-          .connect(peerID, name)
+      client.on('discover', ({ peerID }) =>
+        client
+          .connect(peerID, currentRoom)
           .then(({ peer }) => connectToPeer(peer))
+          .catch(error => {
+            if (error) {
+              client.discover({ remove: currentRoom });
+              setCurrentRoom(null);
+            }
+          })
       );
     }
   }, [localStream]);
@@ -69,7 +74,9 @@ const VideoChat = ({ name }) => {
 };
 
 VideoChat.propTypes = {
-  name: PropTypes.string
+  currentRoom: PropTypes.string,
+  signalClient: PropTypes.object,
+  setCurrentRoom: PropTypes.func
 };
 
 export default VideoChat;
