@@ -1,21 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
 
-import { Doctor, TopBar } from 'components';
+import { Doctor } from 'components';
 
 const IndexPage = () => {
-  return (
-    <Wrapper>
-      <TopBar />
-      <Doctor />
-    </Wrapper>
-  );
+  return <Doctor />;
 };
 
 export default IndexPage;
-
-const Wrapper = styled.div`
-  position: relative;
-  height: 100vh;
-  overflow: hidden;
-`;

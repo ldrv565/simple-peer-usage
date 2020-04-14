@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { Button, TextField } from '@material-ui/core';
 
+import Layout from '../Layout';
 import VideoChat from '../VideoChat';
 
 const Patient = () => {
@@ -19,19 +20,21 @@ const Patient = () => {
   return (
     <>
       {!username ? (
-        <Form method="POST" onSubmit={handleSubmit}>
-          <Title>Введите имя</Title>
+        <Layout>
+          <Form method="POST" onSubmit={handleSubmit}>
+            <Title>Введите имя</Title>
 
-          <TextFieldStyled
-            required
-            value={inputValue}
-            onChange={handleUsernameChange}
-          />
+            <TextFieldStyled
+              required
+              value={inputValue}
+              onChange={handleUsernameChange}
+            />
 
-          <ButtonStyled type="submit" variant="contained" color="primary">
-            Принять
-          </ButtonStyled>
-        </Form>
+            <ButtonStyled type="submit" variant="contained" color="primary">
+              Принять
+            </ButtonStyled>
+          </Form>
+        </Layout>
       ) : (
         <VideoChat currentRoom={username} />
       )}

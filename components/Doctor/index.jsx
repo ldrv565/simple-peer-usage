@@ -9,8 +9,6 @@ import { MenuItem } from '@material-ui/core';
 
 import VideoChat from '../VideoChat';
 
-import Layout from '../Layout';
-
 const isDev = process.env.NODE_ENV !== 'production';
 
 const initSignalClient = () =>
@@ -31,7 +29,7 @@ const DoctorPage = () => {
   }, [currentRoom]);
 
   return (
-    <Layout>
+    <>
       {!currentRoom ? (
         <List>
           {rooms &&
@@ -46,13 +44,9 @@ const DoctorPage = () => {
             ))}
         </List>
       ) : (
-        <VideoChat
-          currentRoom={currentRoom}
-          client={signalClient}
-          setCurrentRoom={setCurrentRoom}
-        />
+        <VideoChat currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} />
       )}
-    </Layout>
+    </>
   );
 };
 

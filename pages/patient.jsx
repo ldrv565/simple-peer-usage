@@ -1,13 +1,9 @@
 import React from 'react';
 
-import { Layout, Patient } from 'components';
+import { Patient } from 'components';
 
 const DoctorPage = () => {
-  return (
-    <Layout>
-      <Patient />
-    </Layout>
-  );
+  return <Patient />;
 };
 
 export default DoctorPage;
