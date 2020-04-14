@@ -42,11 +42,12 @@ const VideoChat = ({ currentRoom, client, setCurrentRoom }) => {
 
   useEffect(() => {
     getLocalStream().then(stream => setLocalStream(stream));
-    signalClient.discover({ roomID: currentRoom });
   }, []);
 
   useEffect(() => {
     if (localStream) {
+      signalClient.discover({ roomID: currentRoom });
+
       signalClient.on('request', request =>
         request.accept().then(({ peer }) => connectToPeer(peer))
       );
