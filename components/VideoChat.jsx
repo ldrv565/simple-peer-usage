@@ -92,7 +92,7 @@ const VideoChat = ({ currentRoom, setCurrentRoom }) => {
         <VideoContainer>
           <Name>{isDoctor ? currentRoom : 'Сергеев П.В.'}</Name>
           {remoteStream ? (
-            <RemoteVideo muted autoPlay srcObject={remoteStream} />
+            <RemoteVideo autoPlay srcObject={remoteStream} />
           ) : (
             <LoaderContainer />
           )}
