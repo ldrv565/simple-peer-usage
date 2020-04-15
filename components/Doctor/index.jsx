@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
+import { useRouter } from 'next/router';
+
 import io from 'socket.io-client';
 import SimpleSignalClient from 'simple-signal-client';
 
@@ -17,9 +19,10 @@ const initSignalClient = () =>
   );
 
 const DoctorPage = () => {
+  const router = useRouter();
   const [signalClient] = useState(() => initSignalClient());
   const [rooms, setRooms] = useState([]);
-  const [currentRoom, setCurrentRoom] = useState(null);
+  const [currentRoom, setCurrentRoom] = useState(router.query.roomID);
 
   useEffect(() => {
     if (!currentRoom) {

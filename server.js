@@ -71,7 +71,7 @@ app.prepare().then(() => {
       };
 
       request.discover(request.socket.id, {
-        peer: rooms[roomID].patient
+        peer: rooms[roomID] && rooms[roomID].patient
       });
 
       // doctor will receive new rooms data
