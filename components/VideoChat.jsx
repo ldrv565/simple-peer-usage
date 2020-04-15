@@ -140,16 +140,26 @@ const VideoContainer = styled.div`
   position: relative;
   height: 100%;
   width: min-content;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const LoaderContainer = styled.video`
   width: 60vw;
   height: 100%;
   background: ${({ theme }) => theme.palette.gray.main};
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const RemoteVideo = styled(StreamVideo)`
   height: 100%;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const Name = styled.span`
@@ -169,6 +179,11 @@ const LocalVideo = styled(StreamVideo)`
   right: 24px;
   bottom: 24px;
   width: 200px;
+
+  @media (max-width: 768px) {
+    bottom: unset;
+    top: 24px;
+  }
 `;
 
 // ---------
