@@ -2,6 +2,7 @@ node_modules
 .next
 .now
 .vscode
+.idea
 .env
 .env.build
 **/package-lock.json
