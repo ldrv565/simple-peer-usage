@@ -1,6 +1,6 @@
 import React from 'react';
 
-import withAuth from 'core/utils/withAuth';
+import { withAuth } from 'core/utils';
 import { Patient } from 'components';
 
 const DoctorPage = () => {

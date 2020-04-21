@@ -10,7 +10,7 @@ export default function withAuth(AuthComponent) {
       if (!token) {
         if (ctx.res) {
           ctx.res.writeHead(302, {
-            Location: 'http://localhost:8080/patient/auth'
+            Location: '/patient/auth'
           });
           ctx.res.end();
         } else {

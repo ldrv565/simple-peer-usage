@@ -1,4 +1,4 @@
-const authy = require('authy')('ndgZxYlaGt3lkG7em2a2IpT0wJQMlJ5G');
+const authy = require('authy')('dtfW4HDy1hd7bo9gNeuNlha16tXw73d1');
 const express = require('express');
 const next = require('next');
 
@@ -114,21 +114,21 @@ app.prepare().then(() => {
     const { email, phone, countryCode } = req.body;
     authy.register_user(email, phone, countryCode, (err, data) => {
       if (err) {
-        return res.json(err);
+        return res.status(400).send(err);
       }
 
-      return res.json(data);
+      return res.status(200).json(data);
     });
   });
 
   server.post('/sendToken', (req, res) => {
     const { userId } = req.body;
-    authy.request_sms(userId, (err, data) => {
+    authy.request_sms(userId, true, (err, data) => {
       if (err) {
-        return res.json(err);
+        return res.status(400).send(err);
       }
 
-      return res.json(data);
+      return res.status(200).json(data);
     });
   });
 
@@ -136,10 +136,10 @@ app.prepare().then(() => {
     const { userId, token } = req.body;
     authy.verify(userId, token, true, (err, data) => {
       if (err) {
-        return res.json(err);
+        return res.status(400).send(err);
       }
 
-      return res.json(data);
+      return res.status(200).json(data);
     });
   });
 

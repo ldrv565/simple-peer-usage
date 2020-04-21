@@ -31,6 +31,8 @@ const useFetch = ({ source, initialParams, lazy = false }) => {
         success: false,
         error: e.message
       });
+
+      throw e;
     }
   }, []);
 

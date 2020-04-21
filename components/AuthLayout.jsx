@@ -1,5 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+
+import Logo from 'public/icons/AstralMedLogo.svg';
+import Bg from 'public/images/bg.png';
 
 const AuthLayout = ({ children }) => {
   return (
@@ -7,8 +11,8 @@ const AuthLayout = ({ children }) => {
       <Wrap>
         <Header>
           {/*<LogoStyled />*/}
-          <Title>АРМ МЕД</Title>
-          <Desc>Инновационная медицинская система</Desc>
+          {/*<Title>АРМ МЕД</Title>*/}
+          {/*<Desc>Инновационная медицинская система</Desc>*/}
         </Header>
 
         <Content>{children}</Content>
@@ -23,13 +27,16 @@ const AuthLayout = ({ children }) => {
   );
 };
 
+AuthLayout.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
 const Page = styled.div`
   height: 100vh;
   display: flex;
   align-items: center;
-  // background: ${({ theme }) =>
-    theme.palette.background.primary} url(${Bg}) left
-  //   center / auto auto no-repeat;
+  background: ${({ theme }) => theme.palette.background.primary} url(${Bg}) left
+    center / auto auto no-repeat;
   overflow: hidden;
   @media (min-width: 768px) {
     background-size: auto 100%;
@@ -53,11 +60,11 @@ const Header = styled.header`
   text-align: center;
 `;
 
-// const LogoStyled = styled(Logo)`
-//   width: 48px;
-//   height: 48px;
-//   margin: 0 auto 12px;
-// `;
+const LogoStyled = styled(Logo)`
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+`;
 
 const Title = styled.h1`
   margin: 0;

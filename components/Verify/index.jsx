@@ -14,24 +14,19 @@ import {
 
 const Verify = () => {
   const { query, push } = useRouter();
-  console.log(query);
   const [verifyStatus, verify] = useFetch({
     source: authySource.verify,
     lazy: true
   });
 
   const handleVerifySubmit = async data => {
-    try {
-      const res = await verify({ ...data, userId: query.id });
-      if (res.success) {
-        let date = new Date(Date.now() + 86400e3);
-        date = date.toUTCString();
-        document.cookie = `token=${query.id}; expires=${date}`;
+    const res = await verify({ ...data, userId: query.id });
+    if (res.success) {
+      let date = new Date(Date.now() + 86400e3);
+      date = date.toUTCString();
+      document.cookie = `token=${query.id}; path=/; expires=${date}`;
 
-        await push('/patient');
-      }
-    } catch (e) {
-      console.log('handleVerifySubmit', e.message);
+      await push('/patient');
     }
   };
 

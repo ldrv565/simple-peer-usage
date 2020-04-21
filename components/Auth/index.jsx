@@ -24,15 +24,14 @@ const Auth = () => {
   const router = useRouter();
 
   const handleRegisterSubmit = async data => {
-    try {
-      const {
-        user: { id }
-      } = await register({ ...data, countryCode: 7 });
-      await token({ userId: id });
-      await router.push(`/patient/auth/verify/${id}`);
-    } catch (e) {
-      console.log('handleRegisterSubmit error', e.message);
-    }
+    const {
+      user: { id }
+    } = await register({ ...data, countryCode: 7 });
+    await token({ userId: id });
+    // TODO костыль для того authy отправил смс токен на телефон клиент, нужно разобраться почему с первого запроса на генерацию токена клиенту ничего не приходит
+    await token({ userId: id });
+
+    await router.push(`/patient/auth/verify/${id}`);
   };
 
   return (

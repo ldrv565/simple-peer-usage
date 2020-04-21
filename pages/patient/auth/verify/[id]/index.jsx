@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { AuthLayout } from 'components';
-import Verify from 'components/Verify';
+import { AuthLayout, Verify } from 'components';
 
 const PatientVerifyPage = () => {
   return (
