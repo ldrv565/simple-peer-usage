@@ -1,3 +1,4 @@
+const authy = require('authy')('dtfW4HDy1hd7bo9gNeuNlha16tXw73d1');
 const express = require('express');
 const next = require('next');
 
@@ -7,6 +8,8 @@ const SimpleSignalServer = require('simple-signal-server'); // require('simple-s
 
 const { parse } = require('url');
 const { join } = require('path');
+
+const bodyParser = require('body-parser');
 
 const port = parseInt(process.env.PORT, 10) || 8080;
 const isDev = process.env.NODE_ENV !== 'production';
@@ -19,6 +22,9 @@ let doctorRequest = null;
 
 app.prepare().then(() => {
   const server = express();
+
+  server.use(bodyParser.json());
+  server.use(bodyParser.urlencoded({ extended: true }));
 
   const httpServer = http.createServer(app);
 
@@ -102,6 +108,39 @@ app.prepare().then(() => {
     }
 
     return null;
+  });
+
+  server.post('/register', (req, res) => {
+    const { email, phone, countryCode } = req.body;
+    authy.register_user(email, phone, countryCode, (err, data) => {
+      if (err) {
+        return res.status(400).send(err);
+      }
+
+      return res.status(200).json(data);
+    });
+  });
+
+  server.post('/sendToken', (req, res) => {
+    const { userId } = req.body;
+    authy.request_sms(userId, true, (err, data) => {
+      if (err) {
+        return res.status(400).send(err);
+      }
+
+      return res.status(200).json(data);
+    });
+  });
+
+  server.post('/verify', (req, res) => {
+    const { userId, token } = req.body;
+    authy.verify(userId, token, true, (err, data) => {
+      if (err) {
+        return res.status(400).send(err);
+      }
+
+      return res.status(200).json(data);
+    });
   });
 
   server.all('*', async (req, res, nextHandle) => {
