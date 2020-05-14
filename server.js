@@ -10,6 +10,7 @@ const { parse } = require('url');
 const { join } = require('path');
 
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const port = parseInt(process.env.PORT, 10) || 8080;
 const isDev = process.env.NODE_ENV !== 'production';
@@ -23,6 +24,7 @@ let doctorRequest = null;
 app.prepare().then(() => {
   const server = express();
 
+  server.use(cors());
   server.use(bodyParser.json());
   server.use(bodyParser.urlencoded({ extended: true }));
 
